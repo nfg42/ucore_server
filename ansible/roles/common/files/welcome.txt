@@ -1,1 +1,0 @@
-Welcome to your ansible-pull-managed system!

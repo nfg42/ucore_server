@@ -1,0 +1,32 @@
+# Managed by Ansible (sshd_hardening role)
+Port {{ sshd_port }}
+{% for addr in sshd_listen_addresses %}ListenAddress {{ addr }}
+{% endfor %}
+Protocol 2
+UsePAM yes
+LoginGraceTime {{ sshd_login_grace_time }}
+MaxAuthTries {{ sshd_max_auth_tries }}
+MaxSessions {{ sshd_max_sessions }}
+{% if sshd_max_startups %}MaxStartups {{ sshd_max_startups }}{% endif %}
+PermitRootLogin {{ sshd_permit_root_login }}
+PasswordAuthentication {{ 'yes' if sshd_password_auth else 'no' }}
+KbdInteractiveAuthentication {{ 'yes' if sshd_kbd_interactive else 'no' }}
+PubkeyAuthentication {{ 'yes' if sshd_pubkey_auth else 'no' }}
+{% if sshd_authentication_methods %}AuthenticationMethods {{ sshd_authentication_methods }}{% endif %}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
+X11Forwarding {{ sshd_x11_forwarding }}
+PermitTunnel {{ sshd_permit_tunnel }}
+PermitUserEnvironment {{ sshd_permit_user_env }}
+ClientAliveInterval {{ sshd_client_alive_interval }}
+ClientAliveCountMax {{ sshd_client_alive_count_max }}
+LogLevel {{ sshd_loglevel }}
+SyslogFacility {{ sshd_syslog_facility }}
+{% if sshd_allow_users %}AllowUsers {{ sshd_allow_users | join(' ') }}{% endif %}
+{% if sshd_allow_groups %}AllowGroups {{ sshd_allow_groups | join(' ') }}{% endif %}
+{% for hk in sshd_hostkeys %}HostKey {{ hk }}
+{% endfor %}
+{% if sshd_kex_algorithms %}KexAlgorithms {{ sshd_kex_algorithms | join(',') }}{% endif %}
+{% if sshd_ciphers %}Ciphers {{ sshd_ciphers | join(',') }}{% endif %}
+{% if sshd_macs %}MACs {{ sshd_macs | join(',') }}{% endif %}
+{% if sshd_banner_text %}Banner /etc/issue.ssh{% endif %}

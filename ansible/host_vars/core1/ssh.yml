@@ -1,0 +1,6 @@
+sshd_hardening_enabled: true
+sshd_port: 22
+sshd_password_auth: true
+sshd_authentication_methods: "publickey"
+sshd_allow_groups: ["sshusers","wheel"]
+sshd_loglevel: VERBOSE

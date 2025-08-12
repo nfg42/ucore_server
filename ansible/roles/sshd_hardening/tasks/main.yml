@@ -1,0 +1,34 @@
+---
+- name: "sshd_hardening | exit if disabled"
+  ansible.builtin.meta: end_play
+  when: not sshd_hardening_enabled
+
+- name: "Ensure drop-in directory exists"
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
+- name: "Write optional banner"
+  ansible.builtin.copy:
+    dest: /etc/issue.ssh
+    content: "{{ sshd_banner_text }}\n"
+    owner: root
+    group: root
+    mode: "0644"
+  when: sshd_banner_text | length > 0
+  become: true
+
+- name: "Deploy hardening drop-in"
+  ansible.builtin.template:
+    src: 10-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/10-hardening.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Validate and reload sshd
+  become: true

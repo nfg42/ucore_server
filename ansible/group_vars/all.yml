@@ -2,3 +2,13 @@
 
 host_map:
   "cca51890": core1
+
+
+admin_user: ladmin
+admin_group: ladmin
+admin_uid: null
+admin_gid: null
+admin_home: "/home/{{ admin_user }}"
+admin_shell: /bin/bash
+admin_authorized_keys: []
+admin_extra_groups: ["wheel"]

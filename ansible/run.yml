@@ -9,5 +9,14 @@
 - name: Setup compute host
   hosts: compute
   gather_facts: true
+  pre_tasks:
+    - name: Guard: refuse to disable SSH passwords without admin key
+      ansible.builtin.assert:
+        that:
+          - not (sshd_hardening_enabled | default(false)) or (sshd_password_auth | default(false)) or (admin_authorized_keys | length > 0)
+        fail_msg: >
+          You set sshd_password_auth: false but admin_authorized_keys is empty.
+          Add at least one key in host_vars before disabling SSH passwords.
   roles:
     - role: common
+    - role: sshd_hardening         # then apply ssh hardening drop-in
