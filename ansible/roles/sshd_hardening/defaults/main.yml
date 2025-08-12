@@ -5,7 +5,7 @@ sshd_listen_addresses: []
 sshd_permit_root_login: "no"
 sshd_password_auth: false
 sshd_kbd_interactive: false
-sshd_pubkey_auth: true
+sshd_pubkey_auth: true 
 sshd_authentication_methods: "publickey"
 sshd_allow_users: []
 sshd_allow_groups: []
@@ -14,16 +14,23 @@ sshd_login_grace_time: "30s"
 sshd_client_alive_interval: 300
 sshd_client_alive_count_max: 2
 sshd_max_sessions: 10
-sshd_max_startups: "10:30:60"
+#sshd_max_startups: "10:30:60"
 sshd_allow_tcp_forwarding: "no"
 sshd_allow_agent_forwarding: "no"
 sshd_x11_forwarding: "no"
 sshd_permit_tunnel: "no"
 sshd_permit_user_env: "no"
-sshd_loglevel: "VERBOSE"
-sshd_syslog_facility: "AUTHPRIV"
-sshd_kex_algorithms: []
-sshd_ciphers: []
-sshd_macs: []
-sshd_hostkeys: []
+#sshd_loglevel: "VERBOSE"
+#sshd_syslog_facility: "AUTHPRIV"
+#sshd_kex_algorithms: []
+#sshd_ciphers: []
+#sshd_macs: []
+#sshd_hostkeys: []
 sshd_banner_text: ""
+
+sshd_usedns: "no"
+sshd_permit_empty_password: "no"
+#sshd_challenge_response_auth: "no"
+sshd_gss_api_authentication: "no"
+
+

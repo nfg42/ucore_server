@@ -1,26 +1,23 @@
 ---
-- name: "Validate and reload sshd"
+# Each handler listens to the same event name and runs in order.
+- name: Validate sshd config (sshd -t)
   listen: "Validate and reload sshd"
-  block:
-    - name: "Validate sshd config (sshd -t)"
-      ansible.builtin.command: sshd -t
-      changed_when: false
-      become: true
+  ansible.builtin.command: sshd -t
+  changed_when: false
+  become: true
 
-    - name: "Reload sshd"
-      ansible.builtin.systemd:
-        name: sshd
-        state: reloaded
-      when: sshd_reload_only
-      become: true
+- name: Reload sshd
+  listen: "Validate and reload sshd"
+  ansible.builtin.systemd:
+    name: sshd
+    state: reloaded
+  when: sshd_reload_only | default(true)
+  become: true
 
-    - name: "Restart sshd"
-      ansible.builtin.systemd:
-        name: sshd
-        state: restarted
-      when: not sshd_reload_only
-      become: true
-  rescue:
-    - name: "Abort due to invalid sshd config"
-      ansible.builtin.fail:
-        msg: "Invalid sshd config; not reloading."
+- name: Restart sshd
+  listen: "Validate and reload sshd"
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+  when: not (sshd_reload_only | default(true))
+  become: true
