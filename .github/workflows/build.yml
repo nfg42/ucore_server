@@ -11,6 +11,7 @@ on:
       - main
     paths-ignore:
       - '**/README.md'
+      - 'ansible/**'
   workflow_dispatch:
 
 env:
