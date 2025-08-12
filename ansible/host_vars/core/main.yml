@@ -1,0 +1,10 @@
+_hostname: core
+
+user: core
+media_group: core # Group for share perms.
+
+
+custom_message: "Hello from ansible-pull!"
+new_user: ladmin
+ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMexamplekey1234567890== user@host"
+

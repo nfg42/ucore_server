@@ -1,0 +1,21 @@
+- name: Lookup hostname based on UUID
+  set_fact:
+    target_hostname: "{{ host_map[this_uuid] | default('unknown') }}"
+
+- name: Include host-specific config
+  include_vars: "host_vars/{{ target_hostname }}/main.yml"
+  when: target_hostname != 'unknown'
+
+- name: Set new hostname
+  ansible.builtin.hostname:
+    name: "{{ _hostname }}"
+  register: hostname_result
+  when: target_hostname != 'unknown'
+#  when: current_hostname.stdout != desired_hostname
+
+- name: Reboot manually if hostname was changed
+  ansible.builtin.command: /sbin/reboot
+  when: hostname_result is changed
+  async: 0
+  poll: 0
+  ignore_errors: true

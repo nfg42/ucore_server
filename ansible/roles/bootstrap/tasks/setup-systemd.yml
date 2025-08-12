@@ -1,0 +1,37 @@
+- name: Setup ansible-pull systemd service and timer
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Create ansible-pull systemd service
+      copy:
+        dest: /etc/systemd/system/ansible-pull.service
+        content: |
+          [Unit]
+          Description=Run ansible-pull
+
+          [Service]
+          ExecStart=/usr/bin/ansible-pull -U https://github.com/YOURUSER/ansible-config.git -d /etc/ansible/pull -i localhost, site.yml
+          Environment=ANSIBLE_HOST_KEY_CHECKING=False
+
+    - name: Create ansible-pull systemd timer
+      copy:
+        dest: /etc/systemd/system/ansible-pull.timer
+        content: |
+          [Unit]
+          Description=Run ansible-pull every hour
+
+          [Timer]
+          OnBootSec=5min
+          OnUnitActiveSec=1h
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+
+    - name: Enable and start the timer
+      systemd:
+        name: ansible-pull.timer
+        enabled: true
+        state: started

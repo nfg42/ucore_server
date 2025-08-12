@@ -1,0 +1,32 @@
+- name: Ensure new user exists
+  user:
+    name: "{{ new_user }}"
+    state: present
+    groups: core
+    shell: /bin/bash
+
+- name: Set authorized key for new user
+  authorized_key:
+    user: "{{ new_user }}"
+    key: "{{ ssh_public_key }}"
+    state: present
+
+- name: Copy welcome message
+  copy:
+    src: welcome.txt
+    dest: /home/{{ new_user }}/welcome.txt
+    owner: "{{ new_user }}"
+    group: "{{ new_user }}"
+    mode: '0644'
+
+- name: Create success marker
+  copy:
+    dest: /tmp/ansible-pull-success.txt
+    content: "{{ custom_message }} ({{ ansible_date_time.iso8601 }})\n"
+
+- name: Enable and start cockpit service
+  ansible.builtin.service:
+    name: cockpit
+    enabled: yes
+    state: started
+
