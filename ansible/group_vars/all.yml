@@ -1,7 +1,4 @@
 # group_vars/all.yml
 
 host_map:
-  "96a95d44": core1
-
-
-
+  "20ef0f0c": core1
