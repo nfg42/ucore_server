@@ -10,4 +10,4 @@ INVENTORY="$PULL_DIR/ansible/inventory/hosts.yml"
 mkdir -p "$PULL_DIR"
 
 echo "Running ansible-pull..."
-sudo ansible-pull -U "$REPO_URL" -C "$BRANCH" -d "$PULL_DIR" -i "$INVENTORY" "$PLAYBOOK"
+sudo ansible-pull -U "$REPO_URL" -C "$BRANCH" -d "$PULL_DIR" -i "$INVENTORY" -l "$HOSTNAME" "$PLAYBOOK"
