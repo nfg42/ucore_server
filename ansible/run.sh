@@ -2,11 +2,12 @@
 set -e
 
 REPO_URL="https://github.com/nfg42/ucore_server.git"
-PULL_DIR="/home/core/pull"
+PULL_DIR="$HOME/pull"
 PLAYBOOK="ansible/run.yml"
 BRANCH="main"
 INVENTORY="$PULL_DIR/ansible/inventory/hosts.yml"
 
-# 2. Run ansible-pull
+mkdir -p "$PULL_DIR"
+
 echo "Running ansible-pull..."
-sudo ansible-pull -U "$REPO_URL" -C "$BRANCH" -d "$PULL_DIR" -i "$INVENTORY" -l "$HOSTNAME", "$PLAYBOOK"
+sudo ansible-pull -U "$REPO_URL" -C "$BRANCH" -d "$PULL_DIR" -i "$INVENTORY" "$PLAYBOOK"

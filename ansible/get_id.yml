@@ -1,0 +1,5 @@
+- name: Show this_uuid for host mapping
+  hosts: all
+  gather_facts: true
+  roles:
+    - helper_uuid
