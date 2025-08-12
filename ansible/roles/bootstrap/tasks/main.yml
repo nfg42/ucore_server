@@ -2,16 +2,36 @@
   set_fact:
     target_hostname: "{{ host_map[this_uuid] | default('unknown') }}"
 
+- name: Debug UUID and hostname mapping
+  ansible.builtin.debug:
+    msg:
+      - "this_uuid={{ this_uuid }}"
+      - "host_map_keys={{ host_map.keys() | list }}"
+      - "target_hostname={{ target_hostname }}"
+      - "ansible_hostname={{ ansible_hostname }}"
+
 - name: Include host-specific config
   include_vars: "host_vars/{{ target_hostname }}/main.yml"
   when: target_hostname != 'unknown'
+
+- name: Debug include_vars decision
+  ansible.builtin.debug:
+    msg:
+      - "include_vars_path=host_vars/{{ target_hostname }}/main.yml"
+      - "include_vars_would_run={{ target_hostname != 'unknown' }}"
 
 - name: Set new hostname
   ansible.builtin.hostname:
     name: "{{ _hostname }}"
   register: hostname_result
   when: target_hostname != 'unknown'
-#  when: current_hostname.stdout != desired_hostname
+
+- name: Debug hostname change decision
+  ansible.builtin.debug:
+    msg:
+      - "_hostname={{ _hostname | default('undefined') }}"
+      - "will_set_hostname={{ (target_hostname != 'unknown') and (_hostname is defined) }}"
+      - "hostname_result={{ hostname_result | default('skipped') }}"
 
 - name: Reboot manually if hostname was changed
   ansible.builtin.command: /sbin/reboot
