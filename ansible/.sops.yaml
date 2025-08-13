@@ -1,0 +1,34 @@
+# SOPS + age configuration for Ansible directory
+# Anchors:
+#  - &admin_age: admin age public key
+#  - &<host>_ssh: SSH host public keys
+#
+# Runtime env:
+#  - Admin: export SOPS_AGE_KEY_FILE="$HOME/.config/age/keys.txt"
+#  - Host:  export SOPS_AGE_SSH_KEY_FILE="/etc/ssh/ssh_host_ed25519_key"
+#
+# Replace the example keys below with your real keys.
+
+keys:
+  admin_age: &admin_age "age1exampleexampleexampleexampleexampleexampleexampleexample"
+  # hosts:
+  #   core1: &core1_ssh "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... core1"
+
+creation_rules:
+  # Global secrets: admin only
+  - path_regex: ^group_vars/all/.+secrets\.sops\.yaml$
+    age: [*admin_age]
+
+  # Group secrets: admin + listed hosts (add anchors like *core1_ssh as needed)
+  - path_regex: ^group_vars/[^/]+/.+secrets\.sops\.yaml$
+    age: [*admin_age]
+    # ssh: [*core1_ssh, *host2_ssh]
+
+  # Host secrets: admin + specific host ssh key
+  - path_regex: ^host_vars/([^/]+)/.+secrets\.sops\.yaml$
+    age: [*admin_age]
+    # ssh: [*core1_ssh]
+
+update_keys:
+  age: true
+  ssh: true

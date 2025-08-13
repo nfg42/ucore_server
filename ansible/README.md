@@ -1,5 +1,29 @@
 # Ansible for ucore_server
 
+## SOPS + age (unattended ansible-pull)
+
+Repo policy:
+- Plain variables live in vars.yml
+- Secrets live in secrets.sops.yaml (encrypted by sops)
+- SOPS config is in ansible/.sops.yaml
+
+Runtime env vars:
+- Admin: export SOPS_AGE_KEY_FILE="$HOME/.config/age/keys.txt"
+- Host: export SOPS_AGE_SSH_KEY_FILE="/etc/ssh/ssh_host_ed25519_key"
+
+API via just (requires sops and yq):
+- Add host: just -f ansible/ansible.just sops-add-host host=<host> pubkey="ssh-ed25519 AAAA..."
+- Rotate host key: just -f ansible/ansible.just sops-rotate-host-key host=<host> pubkey="ssh-ed25519 AAAA..."
+- Add host to group: just -f ansible/ansible.just sops-add-host-to-group group=<group> host=<host>
+- Remove host from group: just -f ansible/ansible.just sops-remove-host-from-group group=<group> host=<host> rotate=0 replacements='{"key": "new"}'
+- Encrypt a file: just -f ansible/ansible.just sops-encrypt path=ansible/group_vars/all/secrets.sops.yaml
+- Update keys/rewrap: just -f ansible/ansible.just sops-updatekeys path=ansible/group_vars
+
+Usage in playbooks:
+- Install community.sops collection
+- Access decrypted vars directly when running as admin or on a host with SSH host key configured
+- Example: tailscale up --authkey={{ group1_tailscale_key }}
+
 This directory contains the Ansible playbooks, inventories, and roles used to configure and maintain ucore_server hosts via ansible-pull.
 
 ## Overview
