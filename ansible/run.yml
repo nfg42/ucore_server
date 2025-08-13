@@ -4,11 +4,13 @@
   vars:
     this_uuid: "{{ ansible_product_uuid | hash('sha256') | regex_replace('^(.{8}).*', '\\1') }}"
   roles:
-    - bootstrap
+    - role: bootstrap
+    - role: secrets_tools
 
 - name: Setup compute host
   hosts: compute
   gather_facts: true
   roles:
     - role: common
+    - role: secrets_tools
     - role: sshd_hardening         # then apply ssh hardening drop-in

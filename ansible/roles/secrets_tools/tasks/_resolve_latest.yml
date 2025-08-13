@@ -1,0 +1,38 @@
+---
+- name: Resolve sops latest tag
+  when: sops_version | lower == "latest"
+  block:
+    - name: Query GitHub releases (sops)
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/getsops/sops/releases/latest
+        headers: "{{ github_token | length > 0 | ternary({'Authorization': 'Bearer ' + github_token}, {}) }}"
+        return_content: true
+        status_code: 200
+      register: _sops_api
+    - name: Set sops_version fact
+      ansible.builtin.set_fact:
+        sops_version: "{{ (_sops_api.json.tag_name | default('')) | trim }}"
+    - name: Ensure sops_version resolved
+      ansible.builtin.assert:
+        that:
+          - sops_version is match('^v?[0-9]+\\.[0-9]+\\.[0-9]+')
+        fail_msg: "Could not resolve latest sops version."
+
+- name: Resolve age latest tag
+  when: age_version | lower == "latest"
+  block:
+    - name: Query GitHub releases (age)
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/FiloSottile/age/releases/latest
+        headers: "{{ github_token | length > 0 | ternary({'Authorization': 'Bearer ' + github_token}, {}) }}"
+        return_content: true
+        status_code: 200
+      register: _age_api
+    - name: Set age_version fact
+      ansible.builtin.set_fact:
+        age_version: "{{ (_age_api.json.tag_name | default('')) | trim }}"
+    - name: Ensure age_version resolved
+      ansible.builtin.assert:
+        that:
+          - age_version is match('^v?[0-9]+\\.[0-9]+\\.[0-9]+')
+        fail_msg: "Could not resolve latest age version."

@@ -1,0 +1,61 @@
+---
+# Determine current installed version (if any)
+- name: Check current {{ tool_name }} version
+  ansible.builtin.command: "{{ secrets_tools_prefix }}/{{ tool_name }} --version"
+  register: _cur
+  changed_when: false
+  failed_when: false
+
+- name: Normalize current version
+  ansible.builtin.set_fact:
+    current_version: "{{ (_cur.stdout | default('') | regex_search('v?[0-9][0-9.]*')) | default('') }}"
+
+- name: Decide if update is needed
+  ansible.builtin.set_fact:
+    need_update: "{{ (current_version | default('')) != (tool_version | default('')) }}"
+
+- name: Download {{ tool_name }} tarball when update needed
+  when: need_update
+  ansible.builtin.get_url:
+    url: "{{ tarball_url }}"
+    dest: "/tmp/{{ tool_name }}-{{ tool_version }}.tar.gz"
+    mode: "0644"
+    checksum: "{{ (expected_sha256 | length) > 0 | ternary('sha256:' ~ expected_sha256, omit) }}"
+
+- name: Extract {{ tool_name }} archive
+  when: need_update
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ tool_name }}-{{ tool_version }}.tar.gz"
+    dest: "/tmp/{{ tool_name }}-{{ tool_version }}"
+    remote_src: true
+
+- name: Locate binaries in extracted tree
+  when: need_update
+  ansible.builtin.find:
+    paths: "/tmp/{{ tool_name }}-{{ tool_version }}"
+    file_type: file
+    patterns: "{{ [tool_name] + (extra_binaries | default([])) }}"
+    recurse: yes
+  register: _bins
+
+- name: Ensure required binaries were found
+  when: need_update
+  ansible.builtin.assert:
+    that:
+      - (_bins.files | map(attribute='path') | list | length) >= 1
+    fail_msg: "Could not find extracted binaries for {{ tool_name }}."
+
+- name: Install {{ tool_name }} (and extras) to {{ secrets_tools_prefix }}
+  when: need_update
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: "{{ secrets_tools_prefix }}/{{ item.path | basename }}"
+    mode: "0755"
+  loop: "{{ _bins.files }}"
+
+- name: Show install/update result (verbosity 1)
+  ansible.builtin.debug:
+    msg: >-
+      {{ tool_name }} {{ need_update | ternary('installed/updated to ' ~ tool_version,
+                                               'already at ' ~ current_version | default('N/A')) }}
+    verbosity: 1

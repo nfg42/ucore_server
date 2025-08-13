@@ -1,0 +1,22 @@
+# Where to install binaries
+secrets_tools_prefix: "/usr/local/bin"
+
+# Version pins (use "latest" to pull newest on each Ansible run)
+sops_version: "v3.8.1"     # or "latest"
+age_version:  "v1.2.0"     # or "latest"
+
+# Optional checksums when pinning specific versions (recommended for prod)
+sops_sha256: ""            # e.g. "2e3a..."; leave empty to skip verification
+age_sha256:  ""            # e.g. "6c9b..."
+
+# OS/Arch mapping
+secrets_tools_goos: "linux"
+secrets_tools_arch_map:
+  x86_64: "amd64"
+  aarch64: "arm64"
+  armv7l: "armv7"
+secrets_tools_arch: "{{ secrets_tools_arch_map.get(ansible_architecture, 'amd64') }}"
+
+# Optional GitHub token to avoid rate limits when using "latest"
+# Set via inventory or env: ANSIBLE_GITHUB_TOKEN
+github_token: "{{ lookup('env','ANSIBLE_GITHUB_TOKEN') | default('', true) }}"

@@ -1,0 +1,30 @@
+---
+- name: Ensure target bin dir exists
+  ansible.builtin.file:
+    path: "{{ secrets_tools_prefix }}"
+    state: directory
+    mode: "0755"
+
+# Resolve "latest" to a concrete version via GitHub API (if requested)
+- name: Resolve latest tags (sops/age) when needed
+  ansible.builtin.include_tasks: _resolve_latest.yml
+
+# Install/Update SOPS
+- name: Install or update sops
+  ansible.builtin.include_tasks: _install_one.yml
+  vars:
+    tool_name: "sops"
+    tool_version: "{{ sops_version }}"
+    tarball_url: "https://github.com/getsops/sops/releases/download/{{ tool_version }}/sops-{{ secrets_tools_goos }}-{{ secrets_tools_arch }}.tar.gz"
+    expected_sha256: "{{ sops_sha256 }}"
+
+# Install/Update AGE (age + age-keygen)
+- name: Install or update age (age + age-keygen)
+  ansible.builtin.include_tasks: _install_one.yml
+  vars:
+    tool_name: "age"
+    tool_version: "{{ age_version }}"
+    tarball_url: "https://github.com/FiloSottile/age/releases/download/{{ tool_version }}/age-{{ tool_version }}-{{ secrets_tools_goos }}-{{ secrets_tools_arch }}.tar.gz"
+    expected_sha256: "{{ age_sha256 }}"
+    extra_binaries:
+      - age-keygen
