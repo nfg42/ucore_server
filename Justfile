@@ -20,6 +20,8 @@ check:
     done
     echo "Checking syntax: Justfile"
     just --unstable --fmt --check -f Justfile
+    echo "Checking syntax: ansible/ansible.just"
+    just --unstable --fmt --check -f ansible/ansible.just
 
 # Fix Just Syntax
 [group('Just')]
@@ -31,6 +33,8 @@ fix:
     done
     echo "Checking syntax: Justfile"
     just --unstable --fmt -f Justfile || { exit 1; }
+    echo "Checking syntax: ansible/ansible.just"
+    just --unstable --fmt -f ansible/ansible.just || { exit 1; }
 
 # Clean Repo
 [group('Utility')]
