@@ -1,7 +1,9 @@
 # ucore_server
 
-[![Wiki](https://img.shields.io/badge/Docs-Wiki-blue)](./wiki)
-[![uCore Base](https://img.shields.io/badge/Base-uCore-orange)](https://universal-blue.org/ucore/)
+[![Wiki](https://img.shields.io/badge/Docs-Wiki-blue)](https://github.com/nfg42/ucore_server/wiki)
+
+
+[![uCore Base](https://img.shields.io/badge/Base-uCore-orange)](https://github.com/ublue-os/ucore)
 [![Build Status](https://img.shields.io/badge/Build-bootc-green)](#)
 [![Podman](https://img.shields.io/badge/Container%20Runtime-Podman-purple)](https://podman.io/)
 [![Build Status](https://github.com/nfg42/ucore_server/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nfg42/ucore_server/actions/workflows/build.yml)
@@ -10,7 +12,7 @@
 > ⚠ **Warning:** ucore_server is **incomplete and under active development**.  
 > Features and configurations may change at any time. Do not use in production without backups.
 
-[![Try it Now](https://img.shields.io/badge/Try%20it%20Now-Quick%20Start-brightgreen)](./wiki/Quick-Start)
+[![Try it Now](https://img.shields.io/badge/Try%20it%20Now-Quick%20Start-brightgreen)](https://github.com/nfg42/ucore_server/wiki/Quick-Start)
 
 ---
 
