@@ -1,8 +1,6 @@
 # ucore_server
 
 [![Wiki](https://img.shields.io/badge/Docs-Wiki-blue)](https://github.com/nfg42/ucore_server/wiki)
-
-
 [![uCore Base](https://img.shields.io/badge/Base-uCore-orange)](https://github.com/ublue-os/ucore)
 [![Build Status](https://img.shields.io/badge/Build-bootc-green)](#)
 [![Podman](https://img.shields.io/badge/Container%20Runtime-Podman-purple)](https://podman.io/)
