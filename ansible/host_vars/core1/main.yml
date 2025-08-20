@@ -2,6 +2,9 @@ _hostname: core1
 
 admin_user: ladmin
 admin_group: ladmin
+
+admin_password: "{{ password|password_hash('sha512') }}"
+    
 admin_authorized_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHr70B4/i9XjDzxsxHrn1+lyJ/OrHvfJQL4gwvNi3xOh core@core1"
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ8NmEYncnByvHbkQE/hVtlQNSUDf6HHpRhd0kWxw/ca desktop"
