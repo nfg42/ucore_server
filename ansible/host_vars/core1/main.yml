@@ -8,3 +8,4 @@ encrypt_pass: $6$LhbC5.gHBFRXV1um$7D/2cP6g8fTjddeqnbrOCsyBgf2CP2mPzWtd7Vh3GLW5ZD
 admin_authorized_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHr70B4/i9XjDzxsxHrn1+lyJ/OrHvfJQL4gwvNi3xOh core@core1"
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ8NmEYncnByvHbkQE/hVtlQNSUDf6HHpRhd0kWxw/ca desktop"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOFcsV2LsUWMuTFtBTmUUXDLRoAAeoy1Dvdqtj6Sula phone" 
