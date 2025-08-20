@@ -14,6 +14,8 @@
     groups: "{{ admin_extra_groups | default([]) }}"
     append: true
     create_home: true
+    update_password: always
+    password: "{{ admin_password }}"
     shell: "{{ admin_shell }}"
     state: present
   become: true
