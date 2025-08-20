@@ -12,5 +12,5 @@
   gather_facts: true
   roles:
     - role: common
-    - role: secrets_tools
+    #- role: secrets_tools
     - role: sshd_hardening         # then apply ssh hardening drop-in
