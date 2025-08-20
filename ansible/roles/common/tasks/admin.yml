@@ -15,7 +15,7 @@
     append: true
     create_home: true
     update_password: always
-    password: "{{ admin_password }}"
+    password: "{{ encrypt_pass }}"
     shell: "{{ admin_shell }}"
     state: present
   become: true
