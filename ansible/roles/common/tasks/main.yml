@@ -1,9 +1,15 @@
 ---
-- include_tasks: admin.yml
+#- include_tasks: admin.yml
 
 - name: Enable and start cockpit service
   ansible.builtin.service:
     name: cockpit
     enabled: yes
     state: started
+
+- name: Disable warning about Tte zincati service being disabled on this system.
+  ansible.builtin.service:
+    name: coreos-oci-migration-motd
+    enabled: no
+    state: stopped
 
