@@ -13,6 +13,9 @@ set -ouex pipefail
 #dnf5 install -y systemd-networkd
 dnf5 install -y tmux ansible snapper just powertop yq
 
+#Fix for ISO install issue
+rm /usr/share/doc/just/README*.md
+
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging
@@ -22,8 +25,4 @@ dnf5 install -y tmux ansible snapper just powertop yq
 
 #### Example for enabling a System Unit File
 
-systemctl enable podman.socket
-
-# cockpit doesn't support networkd
-#systemctl disable NetworkManager
-#systemctl enable systemd-networkd
+#systemctl enable podman.socket
