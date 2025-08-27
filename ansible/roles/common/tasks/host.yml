@@ -1,0 +1,13 @@
+---
+- name: Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname | default(inventory_hostname) }}"
+  register: hostname_result
+
+- name: Reboot only if hostname changed
+  ansible.builtin.reboot:
+    msg: "Rebooting after hostname change"
+    reboot_timeout: 600
+  when:
+    - hostname_reboot | default(true) | bool
+    - hostname_result.changed

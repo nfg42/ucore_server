@@ -6,7 +6,7 @@ sshd_permit_root_login: "no"
 sshd_password_auth: false
 sshd_kbd_interactive: false
 sshd_pubkey_auth: true 
-sshd_authentication_methods: "publickey"
+#sshd_authentication_methods: "publickey"
 sshd_allow_users: []
 sshd_allow_groups: []
 sshd_max_auth_tries: 3

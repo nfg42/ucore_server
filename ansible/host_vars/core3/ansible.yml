@@ -1,0 +1,22 @@
+# --- Ansible connection details ---
+ansible_host: 172.16.40.67         # e.g., Tailscale IP or LAN IP
+ansible_user: core               # your SSH user on the target
+ansible_port: 22
+ansible_become: false               # use sudo for privileged tasks
+ansible_become_method: sudo
+#ansible_python_interpreter: /usr/bin/python3  # ensure python3 exists on target
+
+# If your SSH key isn’t the default:
+ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+
+# Helpful SSH defaults for fresh hosts:
+#ansible_ssh_common_args: >-
+#  -o StrictHostKeyChecking=accept-new
+#  -o UserKnownHostsFile=~/.ssh/known_hosts
+
+# Optional: avoid /tmp noexec issues some images have
+#ansible_remote_tmp: /var/tmp/.ansible-${USER}
+
+# Optional: use a jump host (bastion) if needed
+# ansible_ssh_common_args: >-
+#   -o ProxyJump=mybastion.example.com

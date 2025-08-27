@@ -1,0 +1,55 @@
+---
+# Each handler listens to the same event name and runs in order.
+- name: Validate sshd config (sshd -t)
+  listen: "Validate and reload sshd"
+  ansible.builtin.command: sshd -t
+  changed_when: false
+  become: true
+
+- name: Reload sshd
+  listen: "Validate and reload sshd"
+  ansible.builtin.systemd:
+    name: sshd
+    state: reloaded
+  when: sshd_reload_only | default(true)
+  become: true
+
+- name: Restart sshd
+  listen: "Validate and reload sshd"
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+  when: not (sshd_reload_only | default(true))
+  become: true
+
+# roles/common/handlers/main.yml
+- name: Reset connection
+  ansible.builtin.meta: reset_connection
+
+#- name: Verify fstab syntax
+#  listen: "Remount fstab"
+#  ansible.builtin.command: systemd-analyze verify /etc/fstab
+#  changed_when: false
+#  become: true
+
+- name: Verify fstab (prefer findmnt)
+  listen: "Remount fstab"
+  ansible.builtin.command: findmnt --verify --fstab
+  register: _fstab_verify
+  changed_when: false
+  failed_when: _fstab_verify.rc != 0
+  ignore_errors: true
+  become: true
+
+- name: Reload systemd
+  listen: "Remount fstab"
+  ansible.builtin.systemd:
+    daemon_reload: true
+  changed_when: false
+  become: true
+
+- name: Apply mounts from fstab
+  listen: "Remount fstab"
+  ansible.builtin.command: mount -a
+  changed_when: false
+  become: true

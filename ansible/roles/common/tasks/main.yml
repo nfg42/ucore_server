@@ -1,11 +1,8 @@
 ---
-#- include_tasks: admin.yml
-
-- name: Enable and start cockpit service
-  ansible.builtin.service:
-    name: cockpit
-    enabled: yes
-    state: started
+- include_tasks: host.yml
+- include_tasks: fstab.yml
+- include_tasks: admin.yml
+- include_tasks: cockpit.yml
 
 - name: Disable warning about Tte zincati service being disabled on this system.
   ansible.builtin.service:
@@ -13,3 +10,14 @@
     enabled: no
     state: stopped
 
+- name: Disable and stop zincati service
+  ansible.builtin.systemd:
+    name: zincati.service
+    enabled: false
+    state: stopped
+
+- name: Disable and stop systemd-homed service
+  ansible.builtin.systemd:
+    name: systemd-homed.service
+    enabled: false
+    state: stopped

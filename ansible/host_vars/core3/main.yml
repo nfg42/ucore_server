@@ -1,7 +1,7 @@
-_hostname: core1
+_hostname: core3
 
-admin_user: ladmin
-admin_group: ladmin
+admin_user: core
+admin_group: core
 
 #change this
 encrypt_pass: $6$LhbC5.gHBFRXV1um$7D/2cP6g8fTjddeqnbrOCsyBgf2CP2mPzWtd7Vh3GLW5ZDahD9atPSQoalBOF9db9/L7xGNeYKXk9wblcDHCQ1

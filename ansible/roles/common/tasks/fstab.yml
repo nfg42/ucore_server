@@ -1,0 +1,21 @@
+---
+- name: Comment out any / entry in fstab (ostree/uCore)
+  ansible.builtin.replace:
+    path: /etc/fstab
+    # capture the whole offending line into group "line"
+    regexp: '^(?P<line>\s*[^#\s]\S*\s+/\s+\S+.*)$'
+    replace: '# disabled for ostree: \g<line>'
+    backup: true
+  become: true
+  notify: Remount fstab
+
+- name: Rewrite /etc/fstab mountpoint /home -> /var/home (uCore/ostree)
+  ansible.builtin.replace:
+    path: /etc/fstab
+    # match any non-comment line whose 2nd field (mountpoint) is /home
+    regexp: '^(?P<spec>\s*[^#\s]\S*\s+)/home(?P<rest>\s+\S+.*)$'
+    replace: '\g<spec>/var/home\g<rest>'
+    backup: true
+  register: fstab_home_fix
+  become: true
+  notify: Remount fstab

@@ -19,6 +19,13 @@
     shell: "{{ admin_shell }}"
     state: present
   become: true
+  notify: Reset connection
+
+#- name: Relabel ~/ per fcontext rules
+#  command: restorecon -RFv "{{ admin_home }}"
+#  when:
+#    - ansible_selinux is defined
+#    - ansible_selinux.status in ['enforcing','permissive']
 
 - name: "Ensure .ssh directory"
   ansible.builtin.file:
@@ -28,8 +35,7 @@
     group: "{{ admin_group }}"
     mode: "0700"
     seuser: unconfined_u
-    setype: user_home_t
-    recurse: yes
+    setype: ssh_home_t
   become: true
 
 - name: "Install authorized_keys for {{ admin_user }}"
@@ -41,6 +47,7 @@
     path: "{{ admin_home }}/.ssh/authorized_keys"
   loop: "{{ admin_authorized_keys }}"
   become: true
+#  notify: Reload sshd
 
 - name: "Tighten authorized_keys perms"
   ansible.builtin.file:
@@ -49,5 +56,8 @@
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
     mode: "0600"
+    seuser: unconfined_u
+    setype: ssh_home_t
   when: admin_authorized_keys | length > 0
   become: true
+

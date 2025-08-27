@@ -25,3 +25,7 @@ systemctl enable --now zfs-scrub-weekly@<pool>.timer
 systemctl enable --now zfs-scrub-monthly@<pool>.timer
 
 enable cockpit.service
+
+
+
+ansible -i inventory/hosts.yml core2 -m ping -k -K

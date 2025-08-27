@@ -3,6 +3,5 @@ sshd_port: 22
 sshd_password_auth: true
 #change this to be more secure, need to check cockpit for issues
 #sshd_authentication_methods: "publickey"
-
 sshd_allow_groups: ["sshusers","wheel"]
 #sshd_loglevel: VERBOSE

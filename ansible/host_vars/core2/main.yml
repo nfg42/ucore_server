@@ -1,7 +1,8 @@
-_hostname: core1
+hostname: core2
 
 admin_user: ladmin
 admin_group: ladmin
+admin_extra_groups: ["wheel, sudo"]
 
 #change this
 encrypt_pass: $6$LhbC5.gHBFRXV1um$7D/2cP6g8fTjddeqnbrOCsyBgf2CP2mPzWtd7Vh3GLW5ZDahD9atPSQoalBOF9db9/L7xGNeYKXk9wblcDHCQ1

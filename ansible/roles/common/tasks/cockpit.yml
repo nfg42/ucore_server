@@ -1,0 +1,28 @@
+---
+#- name: Enable cockpit service
+#  ansible.builtin.service:
+#    name: cockpit
+#    enabled: true
+
+#- name: Ensure cockpit is running
+#  ansible.builtin.service:
+#    name: cockpit
+#    state: started
+
+- name: Enable and start cockpit service
+  ansible.builtin.systemd:
+    name: cockpit.socket
+    enabled: true
+    state: started
+
+- name: Allow Cockpit local SSH password auth
+  copy:
+    dest: /etc/ssh/sshd_config.d/10-cockpit-local.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      Match Address 127.0.0.1,::1
+          PasswordAuthentication yes
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: Validate and reload sshd
