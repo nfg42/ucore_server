@@ -11,7 +11,7 @@ set -ouex pipefail
 
 # this installs a package from fedora repos
 #dnf5 install -y systemd-networkd
-dnf5 install -y tmux ansible snapper just powertop yq zip unzip
+dnf5 install -y tmux ansible snapper just powertop yq zip unzip htop
 
 #Fix for ISO install issue
 rm /usr/share/doc/just/README*.md
